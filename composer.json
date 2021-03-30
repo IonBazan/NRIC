@@ -1,0 +1,30 @@
+{
+    "name": "ion-bazan/nric",
+    "type": "library",
+    "description": "Provides a value object to store, generate and validate Singapore NRIC/FIN numbers",
+    "keywords": ["Singapore", "NRIC", "FIN", "ID", "value object", "validator", "generator"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ion Bazan",
+            "email": "ion.bazan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">= 7.4",
+        "symfony/polyfill-php80": "^1.22"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "IonBazan\\NRIC\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IonBazan\\NRIC\\Tests\\": "tests"
+        }
+    }
+}
