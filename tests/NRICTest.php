@@ -123,6 +123,8 @@ class NRICTest extends TestCase
         yield ['1993-12-16', '/F[0-9]{7}[A-Z]/'];
         yield ['2000-01-01', '/G[0-9]{7}[A-Z]/'];
         yield ['2002-12-16', '/G[0-9]{7}[A-Z]/'];
+        yield ['2022-01-01', '/G[0-9]{7}[A-Z]/'];
+        yield ['2022-12-16', '/M[0-9]{7}[A-Z]/'];
     }
 
     public function invalidFormatIdsProvider(): iterable
@@ -139,6 +141,7 @@ class NRICTest extends TestCase
         yield ['T5717279A']; // post-2000 NRIC
         yield ['F6470401K']; // pre-2000 FIN
         yield ['G8877699L']; // post-2000 FIN
+        yield ['M8877689K']; // post-2022 FIN
     }
 
     public function validIdsProvider(): iterable
@@ -147,5 +150,6 @@ class NRICTest extends TestCase
         yield ['T5717279C', true, false]; // post-2000 NRIC
         yield ['F6470401W', false, true]; // pre-2000 FIN
         yield ['G8877699U', true, true]; // post-2000 FIN
+        yield ['M8877699L', false, true]; // post-2022 FIN
     }
 }
