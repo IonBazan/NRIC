@@ -15,6 +15,7 @@ final class NRIC implements Stringable
     private const LENGTH = 9;
     private const CHECKSUM_CITIZEN = 'JZIHGFEDCBA';
     private const CHECKSUM_FOREIGNER = 'XWUTRQPNMLK';
+    private const CHECKSUM_FOREIGNER_2022 = 'XWUTROPNJLK';
     private const PREFIX_CITIZEN_1900 = 'S';
     private const PREFIX_CITIZEN_2000 = 'T';
     private const PREFIX_FOREIGNER_1900 = 'F';
@@ -76,6 +77,11 @@ final class NRIC implements Stringable
         return in_array($this->id[0], [self::PREFIX_CITIZEN_2000, self::PREFIX_FOREIGNER_2000], true);
     }
 
+    public function isSeriesM(): bool
+    {
+        return self::PREFIX_FOREIGNER_2022 === $this->id[0];
+    }
+
     public function __toString(): string
     {
         return $this->id;
@@ -87,7 +93,7 @@ final class NRIC implements Stringable
      */
     private function validate(): void
     {
-        $regex = vsprintf('/^([%s%s][\d]{7}[%s])|([%s%s%s][\d]{7}[%s])$/', [
+        $regex = vsprintf('/^([%s%s][\d]{7}[%s])|([%s%s%s][\d]{7}[%s%s])$/', [
             self::PREFIX_CITIZEN_1900,
             self::PREFIX_CITIZEN_2000,
             self::CHECKSUM_CITIZEN,
@@ -95,6 +101,7 @@ final class NRIC implements Stringable
             self::PREFIX_FOREIGNER_2000,
             self::PREFIX_FOREIGNER_2022,
             self::CHECKSUM_FOREIGNER,
+            self::CHECKSUM_FOREIGNER_2022
         ]);
 
         if (preg_match($regex, $this->id) === 0) {
@@ -113,15 +120,39 @@ final class NRIC implements Stringable
 
     private function generateChecksum(): string
     {
-        $checksum = $this->is2000() ? 4 : 0;
+        $checksum = $this->getOffset();
 
         foreach (self::CHECKSUM_WEIGHTS as $key => $weight) {
             $checksum += $this->id[$key+1] * $weight; // @phpstan-ignore-line
         }
 
-        $checksumArr = $this->isForeigner() ? self::CHECKSUM_FOREIGNER : self::CHECKSUM_CITIZEN;
+        return $this->getChecksumChars()[$checksum % 11];
+    }
 
-        return $checksumArr[$checksum % 11];
+    private function getOffset(): int
+    {
+        if ($this->isSeriesM()) {
+            return 3;
+        }
+
+        if ($this->is2000()) {
+            return 4;
+        }
+
+        return 0;
+    }
+
+    private function getChecksumChars(): string
+    {
+        if ($this->isSeriesM()) {
+            return self::CHECKSUM_FOREIGNER_2022;
+        }
+
+        if ($this->isForeigner()) {
+            return self::CHECKSUM_FOREIGNER;
+        }
+
+        return self::CHECKSUM_CITIZEN;
     }
 
     private static function getRandomDate(): DateTimeInterface

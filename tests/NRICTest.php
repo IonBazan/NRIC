@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace IonBazan\NRIC\Tests;
 
+use DateTime;
 use IonBazan\NRIC\Exception\InvalidChecksumException;
 use IonBazan\NRIC\Exception\InvalidFormatException;
 use IonBazan\NRIC\NRIC;
@@ -31,7 +32,7 @@ class NRICTest extends TestCase
      */
     public function testGenerateNricWithDate(string $date, string $regex): void
     {
-        $nric = NRIC::generateNric(new \DateTime($date));
+        $nric = NRIC::generateNric(new DateTime($date));
         self::assertInstanceOf(NRIC::class, $nric);
         NRIC::fromString($nric->__toString());
         self::assertFalse($nric->isForeigner());
@@ -43,7 +44,7 @@ class NRICTest extends TestCase
      */
     public function testGenerateFinWithDate(string $date, string $regex): void
     {
-        $fin = NRIC::generateFin(new \DateTime($date));
+        $fin = NRIC::generateFin(new DateTime($date));
         self::assertInstanceOf(NRIC::class, $fin);
         NRIC::fromString($fin->__toString());
         self::assertTrue($fin->isForeigner());
@@ -53,8 +54,8 @@ class NRICTest extends TestCase
     public function testFinRandomness(): void
     {
         $results = '';
-        for ($i = 0; $i < 10; ++$i) {
-            $results .= NRIC::generateFin(new \DateTime('1993-12-16'))->__toString();
+        for ($i = 0; $i < 100; ++$i) {
+            $results .= NRIC::generateFin(new DateTime('1993-12-16'))->__toString();
         }
 
         for ($i = 0; $i < 10; ++$i) {
@@ -66,7 +67,7 @@ class NRICTest extends TestCase
     {
         $results = [];
         for ($i = 0; $i < 10; ++$i) {
-            $id = NRIC::generateNric(new \DateTime('1967-12-16'));
+            $id = NRIC::generateNric(new DateTime('1967-12-16'));
             self::assertMatchesRegularExpression('/S0[01][0-9]{5}[A-Z]/', $id->__toString());
             $results[] = $id->__toString();
         }
@@ -82,11 +83,12 @@ class NRICTest extends TestCase
     /**
      * @dataProvider validIdsProvider
      */
-    public function testValidIds(string $id, bool $is2000, bool $foreigner): void
+    public function testValidIds(string $id, bool $is2000, bool $foreigner, bool $seriesM = false): void
     {
         $nric = NRIC::fromString($id);
         self::assertSame($is2000, $nric->is2000());
         self::assertSame($foreigner, $nric->isForeigner());
+        self::assertSame($seriesM, $nric->isSeriesM());
     }
 
     /**
@@ -150,6 +152,7 @@ class NRICTest extends TestCase
         yield ['T5717279C', true, false]; // post-2000 NRIC
         yield ['F6470401W', false, true]; // pre-2000 FIN
         yield ['G8877699U', true, true]; // post-2000 FIN
-        yield ['M8877699L', false, true]; // post-2022 FIN
+        yield ['M5043078W', false, true, true]; // post-2022 FIN
+        yield ['M2424771J', false, true, true]; // post-2022 FIN with new J checksum letter
     }
 }
