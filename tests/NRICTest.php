@@ -54,7 +54,7 @@ class NRICTest extends TestCase
     public function testFinRandomness(): void
     {
         $results = '';
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 100; ++$i) {
             $results .= NRIC::generateFin(new DateTime('1993-12-16'))->__toString();
         }
 
