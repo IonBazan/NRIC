@@ -8,6 +8,8 @@
 [![Downloads](https://img.shields.io/packagist/dt/ion-bazan/nric.svg)](https://packagist.org/packages/ion-bazan/nric)
 [![License](https://img.shields.io/packagist/l/ion-bazan/nric.svg)](https://packagist.org/packages/ion-bazan/nric)
 
+**It now supports new 2022 M-series FIN numbers!**
+
 This package provides a self-validating value object for storing, generating and validating Singapore NRIC and FIN numbers in PHP.
 
 ## Usage

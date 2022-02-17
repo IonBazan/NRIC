@@ -1,7 +1,7 @@
 {
     "name": "ion-bazan/nric",
     "type": "library",
-    "description": "Provides a value object to store, generate and validate Singapore NRIC/FIN numbers",
+    "description": "Provides a value object to store, generate and validate Singapore NRIC/FIN numbers, including new M-series FIN numbers",
     "keywords": ["Singapore", "NRIC", "FIN", "ID", "value object", "validator", "generator"],
     "license": "MIT",
     "authors": [
