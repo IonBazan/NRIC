@@ -15,7 +15,7 @@ final class NRIC implements Stringable
     private const LENGTH = 9;
     private const CHECKSUM_CITIZEN = 'JZIHGFEDCBA';
     private const CHECKSUM_FOREIGNER = 'XWUTRQPNMLK';
-    private const CHECKSUM_FOREIGNER_2022 = 'XWUTROPNJLK';
+    private const CHECKSUM_FOREIGNER_2022 = 'XWUTRQPNJLK';
     private const PREFIX_CITIZEN_1900 = 'S';
     private const PREFIX_CITIZEN_2000 = 'T';
     private const PREFIX_FOREIGNER_1900 = 'F';
